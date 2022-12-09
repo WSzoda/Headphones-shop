@@ -18,17 +18,18 @@ const ProductDetails = ({ product, products }) => {
 }
 
 export const getStaticPaths = async () => {
-    const query = `*[_type == 'product'] {
-        slug {
+    const query = `*[_type == "product"]{
+        Slug {
             current
         }
     }`
 
-    const product = await client.fetch(query);
+    const products = await client.fetch(query);
 
     const paths = products.map((product) => ({
+
         params: {
-            slug: product.slug.current
+            slug: product.Slug.current
         }
     }))
 
@@ -40,7 +41,7 @@ export const getStaticPaths = async () => {
 
 
 export const getStaticProps = async ({ params: { slug }}) => {
-    const query = `*[_type == "product" $$ slig.current == '${slug}'][0]`;
+    const query = `*[_type == "product" && Slug.current == '${slug}'][0]`;
     const productsQuery = `*[_type == "product"]`
 
     const product = await client.fetch(query);
